@@ -11,15 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- Preload dos assets -->
-  <link rel="preload" href="assets/monster.webp" as="image">
-  <link rel="preload" href="assets/scream.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
-  <link rel="preload" href="assets/suspense.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
+  <link rel="preload" href="./assets/monster.webp" as="image">
+  <link rel="preload" href="./assets/scream.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
+  <link rel="preload" href="./assets/suspense.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="./styles.css" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#000000">
   <meta name="description" content="Clique para um susto rápido (3–5s). Ideal para trend/reaction no TikTok.">
 </head>
+
 <body>
   <noscript>
     <div class="noscript">
@@ -44,7 +45,7 @@
       <h1 id="app-title" class="title">NÃO CLIQUE</h1>
       <p class="subtitle">Se clicar, você vai se arrepender.</p>
       <button id="start" class="btn btn-primary" aria-label="Iniciar susto" autofocus>
-        CLIQUE / TOQUE
+        TOQUE
       </button>
     </header>
 
@@ -53,18 +54,19 @@
       <p id="countText" class="count-text"></p>
     </div>
 
-    <!-- Imagem do monstro -->
-    <img
-      id="monster"
-      class="monster"
-      src="assets/monster.webp"
-      srcset="assets/monster-mobile.webp 600w, assets/monster.webp 1200w"
-      sizes="(max-width: 768px) 80vw, 50vw"
-      alt="Figura monstruosa com olhos brilhantes e sorriso distorcido."
-      decoding="async"
-      loading="eager"
-      aria-hidden="true"
-    />
+    <!-- Imagem do monstro (com fallback para PNG) -->
+    <picture>
+      <source srcset="./assets/monster.webp" type="image/webp">
+      <img
+        id="monster"
+        class="monster"
+        src="./assets/monster.png"  <!-- fallback para navegadores que não suportam webp -->
+        alt="Figura monstruosa com olhos brilhantes e sorriso distorcido."
+        decoding="async"
+        loading="eager"
+        aria-hidden="true"
+      />
+    </picture>
 
     <!-- CTA final -->
     <section id="cta" class="cta" aria-hidden="true">
@@ -82,10 +84,11 @@
     </div>
 
     <!-- Elementos de áudio -->
-    <audio id="suspenseEl" preload="auto" src="assets/suspense.mp3" crossorigin="anonymous"></audio>
-    <audio id="screamEl" preload="auto" src="assets/scream.mp3" crossorigin="anonymous"></audio>
+    <audio id="suspenseEl" preload="auto" src="./assets/suspense.mp3" crossorigin="anonymous"></audio>
+    <audio id="screamEl" preload="auto" src="./assets/scream.mp3" crossorigin="anonymous"></audio>
   </main>
 
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
+
