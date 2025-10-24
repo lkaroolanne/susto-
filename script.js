@@ -13,78 +13,67 @@ const blood       = $('#blood');
 const glitch1     = document.querySelector('.glitch-layer');
 const glitch2     = document.querySelector('.glitch-layer--2');
 const cta         = $('#cta');
-const copyBtn     = $('#copyLink');
-const copyFeedback= $('#copyFeedback');
 const audioHint   = $('#audioHint');
 
-const soundToggle = $('#soundToggle');
-const muteButton  = $('#muteButton');
-const screamEl    = $('#screamEl'); // fallback <audio>
+// Contagem regressiva
+const countdown = $('#countdown');
+const countText = $('#countText');
 
-// Controle de áudio
-let audioCtx, gainNode, audioBuffer;
-let soundEnabled = false;
-let hardMuted = true;
-let audioReady = false;
-let secondTapNeeded = false;
+// Áudio
+const screamEl   = $('#screamEl');
+const suspenseEl = $('#suspenseEl');
 
 // ===========================
-// ÁUDIO - WebAudio API
+// ÁUDIO — funções simples
 // ===========================
-async function initAudio() {
-  if (audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  gainNode = audioCtx.createGain();
-  gainNode.gain.value = 0.85; // volume do grito
-  gainNode.connect(audioCtx.destination);
-
+function playSuspense() {
   try {
-    const res = await fetch('assets/scream.mp3');
-    const arr = await res.arrayBuffer();
-    audioBuffer = await audioCtx.decodeAudioData(arr);
-    audioReady = true;
+    suspenseEl.currentTime = 0;
+    suspenseEl.volume = 0.6;
+    suspenseEl.play();
   } catch (e) {
-    console.warn('⚠️ Falha no WebAudio, usando fallback.', e);
-    audioReady = false;
+    console.warn('Erro ao tocar suspense', e);
   }
 }
 
+function stopSuspense() {
+  try {
+    suspenseEl.pause();
+    suspenseEl.currentTime = 0;
+  } catch (e) {}
+}
+
 async function playScream() {
-  if (!soundEnabled || hardMuted) return;
-
-  // iOS pode bloquear sem interação
-  if (audioCtx && audioCtx.state === 'suspended') {
-    try { await audioCtx.resume(); } catch {}
-  }
-
-  if (audioCtx && audioReady && audioBuffer) {
-    try {
-      const src = audioCtx.createBufferSource();
-      src.buffer = audioBuffer;
-      src.connect(gainNode);
-
-      const now = audioCtx.currentTime;
-      gainNode.gain.cancelScheduledValues(now);
-      gainNode.gain.setValueAtTime(0.001, now);
-      gainNode.gain.linearRampToValueAtTime(0.85, now + 0.03);
-
-      src.start();
-      secondTapNeeded = false;
-      return;
-    } catch (e) {
-      console.warn('Fallback para <audio>');
-    }
-  }
-
   try {
     screamEl.currentTime = 0;
     screamEl.volume = 1.0;
+    stopSuspense();
     await screamEl.play();
-    secondTapNeeded = false;
   } catch (err) {
-    secondTapNeeded = true;
     audioHint.hidden = false;
   }
+}
+
+// ===========================
+// CONTAGEM REGRESSIVA
+// ===========================
+function startCountdown(onFinish) {
+  countdown.style.display = 'flex';
+  const steps = ["Você está preparado?", "3", "2", "1"];
+  let index = 0;
+
+  playSuspense();
+
+  function nextStep() {
+    if (index < steps.length) {
+      countText.textContent = steps[index++];
+      setTimeout(nextStep, 1000);
+    } else {
+      countdown.style.display = 'none';
+      onFinish();
+    }
+  }
+  nextStep();
 }
 
 // ===========================
@@ -139,42 +128,13 @@ function readCSSms(varName){
 // EVENTOS UI
 // ===========================
 startBtn.addEventListener('click', async () => {
-  await initAudio();
   document.activeElement?.blur?.();
   document.querySelector('.hero').style.display = 'none';
-  runSequence();
-
-  if (secondTapNeeded) {
-    app.addEventListener('click', replayOnce, { once: true });
-  }
-});
-
-function replayOnce(){
-  audioHint.hidden = true;
-  playScream();
-}
-
-soundToggle.addEventListener('click', async () => {
-  await initAudio();
-  soundEnabled = !soundEnabled;
-  hardMuted = !soundEnabled;
-  soundToggle.textContent = soundEnabled ? 'Desativar' : 'Ativar';
-  soundToggle.setAttribute('aria-pressed', String(soundEnabled));
-  muteButton.textContent = soundEnabled ? '🔊' : '🔇';
-});
-
-muteButton.addEventListener('click', () => {
-  hardMuted = !hardMuted;
-  muteButton.textContent = hardMuted ? '🔇' : '🔊';
-});
-
-copyBtn.addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    copyFeedback.textContent = 'Link copiado! 📋';
-  } catch {
-    copyFeedback.textContent = 'Não foi possível copiar o link.';
-  }
+  
+  // inicia contagem antes do susto
+  startCountdown(() => {
+    runSequence();
+  });
 });
 
 // ===========================
@@ -221,7 +181,9 @@ function drawDust() {
 }
 requestAnimationFrame(drawDust);
 
+// ===========================
 // Foco no botão inicial ao carregar
+// ===========================
 window.addEventListener('load', () => {
   startBtn?.focus?.();
 });

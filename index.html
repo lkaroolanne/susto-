@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>⚠️ Sustinho Rápido — Trend TikTok</title>
+  <title>Halloween</title>
 
   <!-- Tipografia -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,7 @@
   <!-- Preload dos assets -->
   <link rel="preload" href="assets/monster.webp" as="image">
   <link rel="preload" href="assets/scream.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
+  <link rel="preload" href="assets/suspense.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
 
   <link rel="stylesheet" href="styles.css" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
@@ -38,13 +39,6 @@
     <div class="glitch-layer" aria-hidden="true"></div>
     <div class="glitch-layer glitch-layer--2" aria-hidden="true"></div>
 
-    <!-- Som -->
-    <div class="sound-banner" role="region" aria-live="polite">
-      <span>🔊 Som alto — ativar som?</span>
-      <button id="soundToggle" class="btn btn-secondary" aria-pressed="false" aria-label="Alternar som">Ativar</button>
-      <button id="muteButton" class="icon-btn" aria-label="Mutar/Desmutar" title="Mutar/Desmutar">🔇</button>
-    </div>
-
     <!-- Tela inicial -->
     <header class="hero">
       <h1 id="app-title" class="title">CLIQUE PARA COMEÇAR</h1>
@@ -53,6 +47,11 @@
         CLIQUE / TOQUE
       </button>
     </header>
+
+    <!-- Contagem regressiva -->
+    <div id="countdown" class="countdown" aria-hidden="true">
+      <p id="countText" class="count-text"></p>
+    </div>
 
     <!-- Imagem do monstro -->
     <img
@@ -69,12 +68,12 @@
 
     <!-- CTA final -->
     <section id="cta" class="cta" aria-hidden="true">
-      <h2 class="cta-title">😱 Compartilhe no TikTok</h2>
+      <h2 class="cta-title">👻 Te peguei!<br>Me segue para mais sites sem sentido kkk</h2>
       <div class="cta-actions">
-        <button id="copyLink" class="btn btn-primary" aria-label="Copiar link para compartilhar">Copiar link</button>
-        <a class="btn btn-secondary" href="https://www.tiktok.com/upload?lang=pt-BR" target="_blank" rel="noopener">Abrir TikTok</a>
+        <a class="btn btn-secondary" href="https://www.tiktok.com/upload?lang=pt-BR" target="_blank" rel="noopener">
+          Abrir TikTok
+        </a>
       </div>
-      <p id="copyFeedback" class="cta-feedback" role="status" aria-live="polite"></p>
     </section>
 
     <!-- Fallback de áudio -->
@@ -82,8 +81,9 @@
       🔁 Toque novamente para ouvir o grito.
     </div>
 
-    <!-- Elemento de áudio -->
+    <!-- Elementos de áudio -->
     <audio id="screamEl" preload="auto" src="assets/scream.mp3" crossorigin="anonymous"></audio>
+    <audio id="suspenseEl" preload="auto" src="assets/suspense.mp3" loop crossorigin="anonymous"></audio>
   </main>
 
   <script src="script.js"></script>
