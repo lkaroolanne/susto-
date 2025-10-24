@@ -24,7 +24,7 @@ const screamEl   = $('#screamEl');
 const suspenseEl = $('#suspenseEl');
 
 // ===========================
-// ÁUDIO — funções simples
+// ÁUDIO
 // ===========================
 function playSuspense() {
   try {
@@ -57,11 +57,12 @@ async function playScream() {
 // ===========================
 // CONTAGEM REGRESSIVA
 // ===========================
-function startCountdown(onFinish) {
+function startCountdown() {
   countdown.style.display = 'flex';
   const steps = ["Você está preparado?", "3", "2", "1"];
   let index = 0;
 
+  // toca suspense junto com contagem
   playSuspense();
 
   function nextStep() {
@@ -70,7 +71,6 @@ function startCountdown(onFinish) {
       setTimeout(nextStep, 1000);
     } else {
       countdown.style.display = 'none';
-      onFinish();
     }
   }
   nextStep();
@@ -94,11 +94,9 @@ function runSequence() {
   glitch2.classList.add('glitch-on');
   app.classList.add('shake');
 
-  // entrada do monstro + grito
-  setTimeout(async () => {
-    monster.classList.add('reveal');
-    await playScream();
-  }, 120);
+  // imagem e grito sincronizados
+  monster.classList.add('reveal');
+  playScream();
 
   setTimeout(() => app.classList.remove('shake'), readCSSms('--t-shake'));
   setTimeout(() => {
@@ -130,11 +128,14 @@ function readCSSms(varName){
 startBtn.addEventListener('click', async () => {
   document.activeElement?.blur?.();
   document.querySelector('.hero').style.display = 'none';
-  
-  // inicia contagem antes do susto
-  startCountdown(() => {
+
+  // começa contagem e suspense juntos
+  startCountdown();
+
+  // tempo do susto — ajustável
+  setTimeout(() => {
     runSequence();
-  });
+  }, 4500);
 });
 
 // ===========================
