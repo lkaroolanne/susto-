@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>⚠️ Sustinho Rápido — Trend TikTok</title>
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Preload dos assets -->
+  <link rel="preload" href="assets/monster.webp" as="image">
+  <link rel="preload" href="assets/scream.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#000000">
+  <meta name="description" content="Clique para um susto rápido (3–5s). Ideal para trend/reaction no TikTok.">
+</head>
+<body>
+  <noscript>
+    <div class="noscript">
+      ⚠️ Esta experiência usa efeitos/áudio. Abra em um navegador com JavaScript para ver a surpresa.
+    </div>
+  </noscript>
+
+  <main id="app" class="app" aria-labelledby="app-title">
+    <!-- Overlays -->
+    <div class="overlay overlay-vignette" aria-hidden="true"></div>
+    <div class="overlay overlay-scanlines" aria-hidden="true"></div>
+    <canvas id="dust" class="overlay overlay-dust" aria-hidden="true"></canvas>
+    <div id="flash" class="overlay overlay-flash" aria-hidden="true"></div>
+    <div id="blood" class="overlay overlay-blood" aria-hidden="true"></div>
+
+    <!-- Camadas de glitch -->
+    <div class="glitch-layer" aria-hidden="true"></div>
+    <div class="glitch-layer glitch-layer--2" aria-hidden="true"></div>
+
+    <!-- Som -->
+    <div class="sound-banner" role="region" aria-live="polite">
+      <span>🔊 Som alto — ativar som?</span>
+      <button id="soundToggle" class="btn btn-secondary" aria-pressed="false" aria-label="Alternar som">Ativar</button>
+      <button id="muteButton" class="icon-btn" aria-label="Mutar/Desmutar" title="Mutar/Desmutar">🔇</button>
+    </div>
+
+    <!-- Tela inicial -->
+    <header class="hero">
+      <h1 id="app-title" class="title">CLIQUE PARA COMEÇAR</h1>
+      <p class="subtitle">Experiência curta e intensa (3–5s).</p>
+      <button id="start" class="btn btn-primary" aria-label="Iniciar susto" autofocus>
+        CLIQUE / TOQUE
+      </button>
+    </header>
+
+    <!-- Imagem do monstro -->
+    <img
+      id="monster"
+      class="monster"
+      src="assets/monster.webp"
+      srcset="assets/monster-mobile.webp 600w, assets/monster.webp 1200w"
+      sizes="(max-width: 768px) 80vw, 50vw"
+      alt="Figura monstruosa com olhos brilhantes e sorriso distorcido."
+      decoding="async"
+      loading="eager"
+      aria-hidden="true"
+    />
+
+    <!-- CTA final -->
+    <section id="cta" class="cta" aria-hidden="true">
+      <h2 class="cta-title">😱 Compartilhe no TikTok</h2>
+      <div class="cta-actions">
+        <button id="copyLink" class="btn btn-primary" aria-label="Copiar link para compartilhar">Copiar link</button>
+        <a class="btn btn-secondary" href="https://www.tiktok.com/upload?lang=pt-BR" target="_blank" rel="noopener">Abrir TikTok</a>
+      </div>
+      <p id="copyFeedback" class="cta-feedback" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Fallback de áudio -->
+    <div id="audioHint" class="audio-hint" role="alert" aria-live="assertive" hidden>
+      🔁 Toque novamente para ouvir o grito.
+    </div>
+
+    <!-- Elemento de áudio -->
+    <audio id="screamEl" preload="auto" src="assets/scream.mp3" crossorigin="anonymous"></audio>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
